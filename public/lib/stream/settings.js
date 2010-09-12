@@ -110,7 +110,7 @@ require.def("stream/settings",
       get: function (namespace, key) {
         //return setting if possible
         if (namespace in settings &&
-          key in namespace[settings]) {
+          key in settings[namespace]) {
             return settings[namespace][key];
           }
         //no setting? return defaultValue if possible
@@ -136,20 +136,6 @@ require.def("stream/settings",
         
         console.log("[settings] set "+namespace+"."+key+" = "+value);
         persist(); // maybe do this somewhat lazily, like once a second
-      },
-      
-      //Updates gui and calls "set()" if value of key in namespace differs
-      setGui: function(namespace, key, value) {        
-        //only change the GUI if the value differs to avoid infinite recursion 
-        //if a callback if registered
-        var element = $("#settings\\."+namespace+"\\."+key);
-        element = element && element[0];
-        //TODO: what if there's more than true and false?
-        if (element && 
-          element.checked !== value) {
-          element.checked = value;
-          this.set(namespace, key, value);
-        }
       },
       
       // returns sorted (by name) list of namespaces
